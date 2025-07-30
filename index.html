@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparador de Planilhas Excel</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/exceljs@2.0.1/dist/es5/exceljs.browser.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+  <h1>Teste de estilo</h1>
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">📊 Comparador de Planilhas Excel</h1>
+      <p class="text-gray-600">Compare múltiplas planilhas e destaque as linhas correspondentes</p>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">1. Importar Planilhas</h2>
+
+      <div class="grid md:grid-cols-3 gap-4">
+        <!-- First File -->
+        <div class="file-upload-container">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Primeira Planilha</label>
+          <div class="file-drop-zone rounded-lg p-6 text-center cursor-pointer"
+            onclick="document.getElementById('file1').click()">
+            <div class="upload-content">
+              <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                <path
+                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <p class="text-sm text-gray-600">Clique ou arraste o arquivo</p>
+            </div>
+            <div class="file-info hidden">
+              <p class="text-sm font-medium text-green-600"></p>
+            </div>
+          </div>
+          <input type="file" id="file1" accept=".xlsx,.xls" class="hidden" onchange="handleFileUpload(this, 1)">
+        </div>
+
+        <!-- Second File -->
+        <div class="file-upload-container">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Segunda Planilha</label>
+          <div class="file-drop-zone rounded-lg p-6 text-center cursor-pointer"
+            onclick="document.getElementById('file2').click()">
+            <div class="upload-content">
+              <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                <path
+                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <p class="text-sm text-gray-600">Clique ou arraste o arquivo</p>
+            </div>
+            <div class="file-info hidden">
+              <p class="text-sm font-medium text-green-600"></p>
+            </div>
+          </div>
+          <input type="file" id="file2" accept=".xlsx,.xls" class="hidden" onchange="handleFileUpload(this, 2)">
+        </div>
+
+        <!-- Third File (Optional) -->
+        <div class="file-upload-container">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Terceira Planilha (Opcional)</label>
+          <div class="file-drop-zone rounded-lg p-6 text-center cursor-pointer"
+            onclick="document.getElementById('file3').click()">
+            <div class="upload-content">
+              <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                <path
+                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <p class="text-sm text-gray-600">Clique ou arraste o arquivo</p>
+            </div>
+            <div class="file-info hidden">
+              <p class="text-sm font-medium text-green-600"></p>
+            </div>
+          </div>
+          <input type="file" id="file3" accept=".xlsx,.xls" class="hidden" onchange="handleFileUpload(this, 3)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Options -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6" id="comparisonSection" style="display: none;">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">2. Modo de Comparação</h2>
+
+      <div class="space-y-3 mb-4">
+        <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+          <input type="radio" name="comparisonMode" value="1vs2" class="mt-1">
+          <div>
+            <span class="text-gray-700 font-medium block">Comparar a primeira planilha com a segunda</span>
+            <span class="text-gray-500 text-sm">Verifica quais linhas da primeira planilha existem na segunda</span>
+          </div>
+        </label>
+        <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+          <input type="radio" name="comparisonMode" value="2vs1" class="mt-1">
+          <div>
+            <span class="text-gray-700 font-medium block">Comparar a segunda planilha com a primeira</span>
+            <span class="text-gray-500 text-sm">Verifica quais linhas da segunda planilha existem na primeira</span>
+          </div>
+        </label>
+        <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50" id="thirdOption"
+          style="display: none;">
+          <input type="radio" name="comparisonMode" value="3vs12" class="mt-1">
+          <div>
+            <span class="text-gray-700 font-medium block">Comparar a terceira planilha com a primeira ou segunda</span>
+            <span class="text-gray-500 text-sm">Verifica quais linhas da terceira planilha existem em ambas as
+              outras</span>
+          </div>
+        </label>
+      </div>
+
+
+      <!-- Column Selection -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Coluna para Comparação (Opcional)</label>
+        <select id="keyColumn" class="w-full p-2 border border-gray-300 rounded-lg">
+          <option value="">Comparar linha completa</option>
+        </select>
+        <p class="text-xs text-gray-500 mt-1">Deixe em branco para comparar a linha inteira</p>
+      </div>
+    </div>
+
+    <!-- Compare Button -->
+    <div class="text-center mb-6" id="compareButtonSection" style="display: none;">
+      <button id="compareBtn"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
+        🔍 Comparar Planilhas
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6" id="progressSection" style="display: none;">
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">Processando...</h3>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+      </div>
+      <p class="text-sm text-gray-600 mt-2" id="progressText">Iniciando comparação...</p>
+    </div>
+
+    <!-- Results -->
+    <div class="bg-white rounded-lg shadow-lg p-6" id="resultsSection" style="display: none;">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">3. Resultados</h2>
+      <div id="resultsContent"></div>
+      <div class="mt-4">
+        <button id="downloadBtn"
+          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300">
+          📥 Baixar Planilha Comparada
+        </button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+  <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9674b5d883c76f80',t:'MTc1Mzg3Njk4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>

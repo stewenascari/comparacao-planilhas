@@ -1,0 +1,13 @@
+.file-drop-zone {
+  border: 2px dashed #cbd5e1;
+  transition: all 0.3s ease;
+}
+
+.file-drop-zone.dragover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.progress-bar {
+  transition: width 0.3s ease;
+}
